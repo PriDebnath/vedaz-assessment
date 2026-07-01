@@ -2,7 +2,7 @@
 services:
   db: # run postgres container on port 5432
     image: postgres:16
-    container_name: postgres-db-container
+    container_name: vedaz-assessment-postgres-db-container
     restart: unless-stopped
     environment: 
       POSTGRES_USER: postgres
