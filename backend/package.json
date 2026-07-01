@@ -4,7 +4,6 @@
   "scripts": {
     "dev": "nodemon --legacy-watch --watch src --ext ts,json --exec ts-node --files src/server.ts",
     "build": "tsc",
-    "start:redis": "redis-server --ignore-warnings ARM64-COW-BUG",
     "start": "node dist/server.js",
     "docker:up": "docker compose up",
     "docker:down": "docker compose down -v",

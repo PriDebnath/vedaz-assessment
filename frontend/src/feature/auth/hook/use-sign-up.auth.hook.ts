@@ -5,10 +5,10 @@ import { useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "../../../store/auth.store";
 import { toastConfig } from "@/components/ui/sonner";
 
-export type SignUpParam = { email: string; password: string };
+export type SignUpParam = { name: string; email: string; password: string };
 
 const signUp = (data: SignUpParam) =>
-  apiClient<{ token: string }>("/api/auth/sign-up", {
+  apiClient<{ token: string }>("/api/v1/auth/sign-up", {
     method: "POST",
     body: JSON.stringify(data),
   });

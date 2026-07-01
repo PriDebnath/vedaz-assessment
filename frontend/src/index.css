@@ -694,6 +694,10 @@ body {
   */
   }
 
+  button{
+    cursor: pointer;
+  }
+
 .font-normal {
   /* System / default font stack */
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
