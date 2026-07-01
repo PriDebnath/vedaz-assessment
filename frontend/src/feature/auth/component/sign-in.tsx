@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Eye, EyeOff, Loader, Loader2 } from "lucide-react"
-import { useAuthSignIn } from "@/feature/auth/hook/auth/use-sign-in.auth.hook"
+import { useAuthSignIn } from "@/feature/auth/hook/use-sign-in.auth.hook"
 
 const formSchema = z.object({
   email: z.string().email("Invalid email"),

@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type FieldValues } from "react-hook-form";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useAuthSignIn, type SignInParam } from "@/feature/auth/hook/auth/use-sign-in.auth.hook";
+import { useAuthSignIn, type SignInParam } from "@/feature/auth/hook/use-sign-in.auth.hook";
 
 const authSchema = z.object({
   email: z.string().min(1, { message: "Email is required" }),

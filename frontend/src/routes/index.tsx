@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { useAuthStore } from '@/store/auth.store'
-import Dashboard from '@/page/dashboard/dashboard.page'
 import { createFileRoute, lazyRouteComponent, useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { toastConfig } from '@/components/ui/sonner'
@@ -26,7 +25,7 @@ function rootComponent() {
   }
   return (
     <>
-      <Dashboard />
+      <p>Yo</p>
     </>
   )
 }

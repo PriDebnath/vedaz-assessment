@@ -2,8 +2,8 @@ import { toast } from "sonner";
 import { apiClient } from "@/lib/apiClient";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { useAuthStore } from "../../../../store/auth.store";
 import { toastConfig } from "@/components/ui/sonner";
+import { useAuthStore } from "@/store/auth.store";
 
 export type SignInParam = { email: string; password: string }
 
