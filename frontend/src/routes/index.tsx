@@ -3,6 +3,7 @@ import { useAuthStore } from '@/store/auth.store'
 import { createFileRoute, lazyRouteComponent, useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { toastConfig } from '@/components/ui/sonner'
+import Chat from '@/feature/chat/chat'
 
 // const component = lazyRouteComponent(() => {
 //     return import('@/page/dashboard/dashboard.page').then(mod => ({ default: mod.default }))
@@ -23,11 +24,7 @@ function rootComponent() {
     toast.info(message,toastConfig);
     return null
   }
-  return (
-    <>
-      <p>Yo</p>
-    </>
-  )
+  return <Chat/>
 }
 
 export const Route = createFileRoute('/')({
