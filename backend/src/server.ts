@@ -23,11 +23,11 @@ async function startServer() {
   io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`);
 
-    socket.on("chat-message", (message) => {
+    socket.on(env.VITE_SOCKET_EVENT_NAME, (message) => {
       console.log(message);
 
       // Send the message to every connected client
-      io.emit("chat-message", message);
+      io.emit(env.VITE_SOCKET_EVENT_NAME, message);
     });
 
     socket.on("disconnect", () => {

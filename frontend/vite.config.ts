@@ -1,13 +1,25 @@
-import path from 'path'
-import { defineConfig } from 'vite'
+ import { z } from "zod";
+ import path from 'path';
+import dotenv from "dotenv";
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import { defineConfig, loadEnv } from 'vite'
 import routerPlugin, { tanstackRouter } from '@tanstack/router-plugin/vite'
- 
-export default defineConfig(({ mode }) => {
+
+const envSchema = z.object({
+    VITE_SOCKET_EVENT_NAME: z.string().min(1, "SOCKET_EVENT_NAME is required"),
+});
+
+export default defineConfig(({ mode , }) => {
   const isGithub = mode === 'github'
+  const env = loadEnv(mode, "../", "");
+  // const envSanitized = envSchema.parse(env);
+// console.log({env});
+
+  console.log(env.VITE_SOCKET_EVENT_NAME);
 
   return {
+    envDir: "../",
     // 🔑 BASE URL
     // Android → "./"
     // GitHub Pages → "/repo-name/"
@@ -27,7 +39,6 @@ export default defineConfig(({ mode }) => {
       //   // disableLogging: true,
       // }),
     ],
-    // envDir: "../",
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),

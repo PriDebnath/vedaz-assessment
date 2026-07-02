@@ -3,13 +3,14 @@ import path from "path";
 import dotenv from "dotenv";
 
 dotenv.config({
-    path: path.resolve(__dirname, "../../.env"),
+    path: path.resolve(__dirname, "../../../.env"),
 });
 
 const envSchema = z.object({
     REDIS_URL: z.string().optional(),
     PORT: z.coerce.number().default(8000),
     PG_DATABASE_URL: z.string().min(1, "PG_DATABASE_URL is required"),
+        VITE_SOCKET_EVENT_NAME: z.string().min(1, "SOCKET_EVENT_NAME is required"),
 });
 
 type Env = z.infer<typeof envSchema>;
