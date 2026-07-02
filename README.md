@@ -1,3 +1,9 @@
+# Basic chat application.
+
+Basic chat application built with with PostgreSQL, NodeJS and React by Pritam Debnath
+
+---
+
 ## 🔴 Demo
 
 ### 🔴 🖼️ Screenshot
@@ -20,10 +26,6 @@ https://github.com/user-attachments/assets/94f08c9c-ba12-4bb9-9687-5ae3fc408ecc
 
 
 ---
-
-# Basic chat application.
-
-basic chat application built with with PostgreSQL, NodeJS and React by Pritam Debnath
 
 
 
