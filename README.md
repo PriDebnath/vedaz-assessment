@@ -2,6 +2,9 @@
 
 Basic chat application built with with PostgreSQL, NodeJS and React by Pritam Debnath
 
+## Feature
+- Chat with other user
+- User authentication flow
 ---
 
 ## 🔴 Demo
