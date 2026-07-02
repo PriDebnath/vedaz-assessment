@@ -4,15 +4,28 @@ import { useAuthStore } from "@/store/auth.store";
 import { parseJwt } from "@/lib/utils";
 import { env } from "@/enviroments/env";
 
+type UserDetail = {
+    id: number;
+    name: string;
+    email: string;
+    created_at: Date;
+    updated_at: Date;
+    is_deleted: boolean;
+}
+
 type Message = {
   text: string;
+        senderId: number;
+        recieverId:number;
+  timestamp: string;
+  align: "right" | "left"
 };
 
 function Chat() {
       const { token } = useAuthStore()
    
 // Usage:
-const userData = parseJwt(token);
+const userData : UserDetail= parseJwt(token);
 console.log({userData});
 
   const [message, setMessage] = useState("");
@@ -28,12 +41,17 @@ console.log({userData});
     };
   }, []);
 
-  function sendMessage() {
+  function sendMessage(recieverId: number) {
     if (!message.trim()) return;
-
-    socket.emit(env.VITE_SOCKET_EVENT_NAME, {
+    const messageDetail: Message = {
       text: message,
-    });
+        senderId: userData.id,
+        recieverId,
+  timestamp: new Date().toLocaleTimeString(),
+  align: "right"
+    }
+
+    socket.emit(env.VITE_SOCKET_EVENT_NAME,messageDetail );
 
     setMessage("");
   }
@@ -55,10 +73,11 @@ console.log({userData});
           overflowY: "auto",
           padding: 10,
           marginBottom: 10,
+          
         }}
       >
         {messages.map((msg, index) => (
-          <div key={index}>{msg.text}</div>
+          <div key={index} style={{textAlign: msg.align}}>{msg.text}</div>
         ))}
       </div>
 
@@ -73,7 +92,7 @@ console.log({userData});
       />
 
       <button
-        onClick={sendMessage}
+        onClick={()=>sendMessage}
         style={{
           padding: 10,
           marginLeft: 10,

@@ -22,3 +22,12 @@ export const getUserByEmail = async (email: string) => {
         .where(eq(table.users.email, email))
     return existingUser
 }
+
+
+export const getUsers = async () =>{
+    return await db.select({
+        id: table.users.id,
+        name: table.users.name,
+        email:table. users.email,
+    }).from(table.users);
+}

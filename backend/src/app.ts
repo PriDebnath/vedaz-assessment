@@ -3,6 +3,7 @@ import swaggerUi from "swagger-ui-express"
 import express, { Express,  } from "express"
 import { logger } from "./utils/config/logger.config";
 import { router as routerAuth } from "./module/auth/router";
+import { router as routerUsers} from "./module/user/router";
 import { swaggerUiApp } from "./utils/config/swagger.config";
 import {  rateLimit } from "./utils/config/rate-limiter.config";
 
@@ -17,7 +18,7 @@ app.use(rateLimit);
 app.use("/docs", swaggerUi.serve, swaggerUiApp);
 
 // Routers
-// app.use("/api/v1/users", routerUsers);
+app.use("/api/v1/users", routerUsers);
 app.use("/api/v1/auth", routerAuth);
 
 app.get("/", (req, res) => {
