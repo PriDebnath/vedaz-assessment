@@ -6,6 +6,7 @@ import { memo, useEffect, useState } from "react";
 import { socket } from "@/lib/socket-io";
 import { useGetUsers } from "@/feature/chat/hook/use-get-users.hook";
 import UserList from "@/feature/chat/component/chat-list";
+import { env } from "@/enviroments/env";
 
 
 function ChatPage() {
@@ -45,10 +46,10 @@ function ChatPage() {
       })
     }
 
-    socket.on("online-users", handleOnlineUsers);
+    socket.on(env.VITE_SOCKET_STATUS_EVENT_NAME, handleOnlineUsers);
 
     return () => {
-      socket.off("online-users", handleOnlineUsers);
+      socket.off(env.VITE_SOCKET_STATUS_EVENT_NAME, handleOnlineUsers);
     };
   }, []);
 

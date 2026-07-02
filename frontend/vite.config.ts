@@ -6,17 +6,10 @@ import tailwindcss from '@tailwindcss/vite'
 import { defineConfig, loadEnv } from 'vite'
 import routerPlugin, { tanstackRouter } from '@tanstack/router-plugin/vite'
 
-const envSchema = z.object({
-    VITE_SOCKET_EVENT_NAME: z.string().min(1, "SOCKET_EVENT_NAME is required"),
-});
 
 export default defineConfig(({ mode , }) => {
   const isGithub = mode === 'github'
   const env = loadEnv(mode, "../", "");
-  // const envSanitized = envSchema.parse(env);
-// console.log({env});
-
-  console.log(env.VITE_SOCKET_EVENT_NAME);
 
   return {
     envDir: "../",

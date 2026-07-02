@@ -6,7 +6,7 @@ function UserChat({ user }: { user: User }) {
     return (
         <button
             key={user.id}
-            className="flex w-full items-center gap-4 px-5 py-4 text-left transition-colors hover:bg-muted/50"
+            className="cursor-none! flex w-full items-center gap-4 px-5 py-4 text-left transition-colors hover:bg-muted/50"
         >
             <div className="relative">
 
