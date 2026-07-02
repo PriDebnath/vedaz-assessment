@@ -35,37 +35,25 @@ export const connectSocket = (server: HttpServer) => {
         onlineUsers.set(user.id, socket.id);
         setTimeout(() => { // send status after some time
             io.emit(env.VITE_SOCKET_STATUS_EVENT_NAME, [...onlineUsers.keys()]);
-        }, 1000);
+        }, 500);
+        
+        socket.on(env.VITE_SOCKET_MESSAGE_EVENT_NAME, async (data) => {
+        console.log({data});
 
-        socket.on(env.VITE_SOCKET_MESSAGE_EVENT_NAME, async ({ receiverId, text }) => {
-
-            const senderId = user.id;
-
-            //-----------------------------------
-            // Save into database
-            //-----------------------------------
-
-            const message = {
-                senderId,
-                receiverId,
-                text,
-            }
-
-            //-----------------------------------
-            // Send to receiver
-            //-----------------------------------
-
+            // const senderId = user.id;
+            const {receiverId, } = data            
             const receiverSocket = onlineUsers.get(receiverId);
-
             if (receiverSocket) {
-                io.to(receiverSocket).emit("private-message", message);
+                io.to(receiverSocket).emit(env.VITE_SOCKET_MESSAGE_EVENT_NAME, {
+                    ...data,
+                    align: "left"
+                });
             }
 
             //-----------------------------------
             // Send back to sender
             //-----------------------------------
-
-            socket.emit("private-message", message);
+            socket.emit(env.VITE_SOCKET_MESSAGE_EVENT_NAME, data);
 
         });
 

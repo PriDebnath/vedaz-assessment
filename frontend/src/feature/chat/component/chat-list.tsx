@@ -29,7 +29,7 @@ function UserList({ users, currentUser }: Props) {
                     }
                     return (
                         user.active ? (
-                            <UserChatDialog user={user} key={user.id} />
+                            <UserChatDialog currentUser={currentUser} user={user} key={user.id} />
                         ) : (
                             <div className="opacity-50" key={user.id}>
                                 <UserChat user={user} />

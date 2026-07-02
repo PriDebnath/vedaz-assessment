@@ -8,17 +8,24 @@ import type { User } from "../hook/use-get-users.hook";
 type Message = {
   text: string;
   senderId: number;
-  recieverId: number;
+  receiverId: number;
   timestamp: string;
   align: "right" | "left"
 };
 
-function Chat({ user }: { user: User }) {
+interface Props {
+  user: User;
+  currentUser: User;
+}
+
+function Chat({ user, currentUser }: Props) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
     socket.on(env.VITE_SOCKET_MESSAGE_EVENT_NAME, (msg: Message) => {
+      console.log('got', msg)
+      
       setMessages((prev) => [...prev, msg]);
     });
 
@@ -27,15 +34,18 @@ function Chat({ user }: { user: User }) {
     };
   }, []);
 
-  function sendMessage(recieverId: number) {
+  function sendMessage() {
+    console.log({ message });
+
     if (!message.trim()) return;
     const messageDetail: Message = {
       text: message,
-      senderId: user.id,
-      recieverId,
+      senderId: currentUser.id,
+      receiverId: user.id,
       timestamp: new Date().toLocaleTimeString(),
       align: "right"
     }
+    console.log({ env, messageDetail });
 
     socket.emit(env.VITE_SOCKET_MESSAGE_EVENT_NAME, messageDetail);
 
@@ -69,7 +79,12 @@ function Chat({ user }: { user: User }) {
 
       <input
         value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        onChange={(e) => {
+          let message = e.target.value
+          console.log({ message });
+
+          setMessage(message)
+        }}
         placeholder="Type message..."
         style={{
           width: "80%",
@@ -78,7 +93,11 @@ function Chat({ user }: { user: User }) {
       />
 
       <button
-        onClick={() => sendMessage}
+        onClick={() => {
+          console.log("click");
+
+          sendMessage()
+        }}
         style={{
           padding: 10,
           marginLeft: 10,

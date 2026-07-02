@@ -10,11 +10,17 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-function UserChatDialog({ user }: { user: User }) {
+interface Props {
+    user: User;
+    currentUser: User;
+}
+
+function UserChatDialog({ user, currentUser }:Props) {
   return (
     <Dialog>
       <DialogTrigger render={
-          <button className="flex w-full items-center gap-4 px-5 py-4 text-left transition-colors hover:bg-muted/50">
+          <button 
+          className="flex w-full items-center gap-4 px-5 py-4 text-left transition-colors hover:bg-muted/50">
           <div className="relative">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-lg font-semibold text-primary-foreground">
               {user.name.charAt(0).toUpperCase()}
@@ -60,7 +66,7 @@ function UserChatDialog({ user }: { user: User }) {
           <DialogTitle>{user.name}</DialogTitle>
         </DialogHeader>
 
-        <Chat user={user} />
+        <Chat user={user} currentUser={currentUser} />
       </DialogContent>
     </Dialog>
   );
