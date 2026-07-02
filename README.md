@@ -2,10 +2,10 @@
 
 ### 🔴 🖼️ Screenshot
 
-<a href="">
-<img height="480" src="" />
-</a>
-
+<div style="display: flex; justify-content: space-around;">
+  <img src="frontend/public/images/chat-list-02-07-2026.png"   style="width: 45%;"/>
+  <img src="frontend/public/images/chat-02-07-2026.png"   style="width: 45%;"/>
+</div>
 
 ### 🔴 🎥 Video
 
@@ -19,9 +19,9 @@
 
 ---
 
-# Title
+# Basic chat application.
 
-Description
+basic chat application made with PostgreSQL, NodeJS
 
 ---
 
@@ -59,6 +59,9 @@ pnpm install
 ```
 npm run corepack:enable
 ``` 
+```
+docker compose up
+```
 ```
 cd backend
 ``` 

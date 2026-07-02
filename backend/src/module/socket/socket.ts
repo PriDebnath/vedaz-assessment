@@ -31,38 +31,27 @@ export const connectSocket = (server: HttpServer) => {
     io.on("connection", (socket) => {
 
         const user = socket.data.user;
-
         onlineUsers.set(user.id, socket.id);
+        
         setTimeout(() => { // send status after some time
             io.emit(env.VITE_SOCKET_STATUS_EVENT_NAME, [...onlineUsers.keys()]);
         }, 500);
         
         socket.on(env.VITE_SOCKET_MESSAGE_EVENT_NAME, async (data) => {
-        console.log({data});
-
-            // const senderId = user.id;
             const {receiverId, } = data            
             const receiverSocket = onlineUsers.get(receiverId);
             if (receiverSocket) {
-                io.to(receiverSocket).emit(env.VITE_SOCKET_MESSAGE_EVENT_NAME, {
-                    ...data,
-                    align: "left"
-                });
+                io.to(receiverSocket)
+                .emit(
+                    env.VITE_SOCKET_MESSAGE_EVENT_NAME, 
+                    data
+                );
             }
-
-            //-----------------------------------
-            // Send back to sender
-            //-----------------------------------
-            socket.emit(env.VITE_SOCKET_MESSAGE_EVENT_NAME, data);
-
         });
 
         socket.on("disconnect", () => {
-
             onlineUsers.delete(user.id);
-
             io.emit(env.VITE_SOCKET_STATUS_EVENT_NAME, [...onlineUsers.keys()]);
-
         });
 
     })
