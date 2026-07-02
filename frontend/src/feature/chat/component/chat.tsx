@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { SendHorizontal } from "lucide-react";
+
 import { socket } from "@/lib/socket-io";
-import { useAuthStore } from "@/store/auth.store";
-import { parseJwt } from "@/lib/utils";
 import { env } from "@/enviroments/env";
+
 import type { User } from "../hook/use-get-users.hook";
 
 type Message = {
@@ -10,7 +12,6 @@ type Message = {
   senderId: number;
   receiverId: number;
   timestamp: string;
-  align: "right" | "left"
 };
 
 interface Props {
@@ -18,14 +19,14 @@ interface Props {
   currentUser: User;
 }
 
-function Chat({ user, currentUser }: Props) {
+export default function Chat({ user, currentUser }: Props) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
 
+  const bottomRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     socket.on(env.VITE_SOCKET_MESSAGE_EVENT_NAME, (msg: Message) => {
-      console.log('got', msg)
-      
       setMessages((prev) => [...prev, msg]);
     });
 
@@ -34,79 +35,115 @@ function Chat({ user, currentUser }: Props) {
     };
   }, []);
 
-  function sendMessage() {
-    console.log({ message });
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [messages]);
 
+  function sendMessage() {
     if (!message.trim()) return;
-    const messageDetail: Message = {
+
+    const msg: Message = {
       text: message,
       senderId: currentUser.id,
       receiverId: user.id,
       timestamp: new Date().toLocaleTimeString(),
-      align: "right"
-    }
-    console.log({ env, messageDetail });
+    };
 
-    socket.emit(env.VITE_SOCKET_MESSAGE_EVENT_NAME, messageDetail);
+    socket.emit(env.VITE_SOCKET_MESSAGE_EVENT_NAME, msg);
+
+    setMessages((prev) => [...prev, msg]);
 
     setMessage("");
   }
 
   return (
-    <div
-      style={{
-        maxWidth: 500,
-        margin: "40px auto",
-        fontFamily: "sans-serif",
-      }}
-    >
-      <h2>Simple Chat</h2>
+    <div className="flex h-[75vh] flex-col">
+      {/* Header */}
+      <div className="border-b px-5 py-4">
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary font-semibold text-primary-foreground">
+              {user.name[0].toUpperCase()}
+            </div>
 
-      <div
-        style={{
-          border: "1px solid #ccc",
-          height: 350,
-          overflowY: "auto",
-          padding: 10,
-          marginBottom: 10,
+            <span
+              className={`absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-background ${
+                user.active ? "bg-green-500" : "bg-gray-400"
+              }`}
+            />
+          </div>
 
-        }}
-      >
-        {messages.map((msg, index) => (
-          <div key={index} style={{ textAlign: msg.align }}>{msg.text}</div>
-        ))}
+          <div>
+            <h2 className="font-semibold">{user.name}</h2>
+            <p className="text-sm text-muted-foreground">
+              {user.active ? "Online" : "Offline"}
+            </p>
+          </div>
+        </div>
       </div>
 
-      <input
-        value={message}
-        onChange={(e) => {
-          let message = e.target.value
-          console.log({ message });
+      {/* Messages */}
+      <div className="flex-1 space-y-3 overflow-y-auto bg-muted/20 p-5">
+        <AnimatePresence>
+          {messages.map((msg, index) => {
+            const mine = msg.senderId === currentUser.id;
 
-          setMessage(message)
-        }}
-        placeholder="Type message..."
-        style={{
-          width: "80%",
-          padding: 10,
-        }}
-      />
+            return (
+              <motion.div
+                key={index}
+                layout
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`flex ${
+                  mine ? "justify-end" : "justify-start"
+                }`}
+              >
+                <div
+                  className={`max-w-[70%] rounded-2xl px-4 py-3 ${
+                    mine
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-background border"
+                  }`}
+                >
+                  <p>{msg.text}</p>
 
-      <button
-        onClick={() => {
-          console.log("click");
+                  <p className="mt-1 text-right text-[10px] opacity-60">
+                    {msg.timestamp}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
 
-          sendMessage()
-        }}
-        style={{
-          padding: 10,
-          marginLeft: 10,
-        }}
-      >
-        Send
-      </button>
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Input */}
+      <div className="border-t bg-background p-4">
+        <div className="flex items-center gap-3">
+          <input
+            className="flex-1 rounded-full border bg-muted px-5 py-3 outline-none focus:ring-2 focus:ring-primary"
+            placeholder="Type a message..."
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") sendMessage();
+            }}
+          />
+
+          <motion.button
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={sendMessage}
+            className="rounded-full bg-primary p-3 text-primary-foreground"
+          >
+            <SendHorizontal size={18} />
+          </motion.button>
+        </div>
+      </div>
     </div>
   );
 }
-
-export default Chat;
