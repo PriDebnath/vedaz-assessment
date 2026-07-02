@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/apiClient";
 
 export type User = {
-  id: string;
+  id: number;
   name: string;
   email: string;
     active: boolean;

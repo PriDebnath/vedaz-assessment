@@ -9,7 +9,8 @@ import { getUsers } from "../user/service"
 export const getUsersController = async (req: Request, res:Response)=>{
     try {
         const users = await getUsers()
-        res.status(200).json(users)
+        const usersWithStatus = users.map((u)=>{ return{...u, active: false}})
+        res.status(200).json(usersWithStatus)
     } catch (error) {        
         errorHandler({ response: res, error})
     }
